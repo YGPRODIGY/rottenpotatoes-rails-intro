@@ -11,7 +11,9 @@ class MoviesController < ApplicationController
   end
 
   def index
-    
+  if @movies == nil
+    @movies = Movie.all
+  end
     @all_ratings = Movie.all_ratings
   
     sort_choice = params[:sort]
@@ -40,8 +42,6 @@ class MoviesController < ApplicationController
       session[:sort] = params[:sort]
     end
     
-  
-    
     if sort_choice == 'title'
       @title_header = 'hilite'
       @movies =  Movie.where(:rating => @selected_ratings.keys).order(title: :asc)
@@ -60,6 +60,7 @@ class MoviesController < ApplicationController
     @movie = Movie.create!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully created."
     redirect_to movies_path
+   # @movies = Movie.all
   end
 
   def edit
